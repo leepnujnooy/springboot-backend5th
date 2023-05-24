@@ -9,17 +9,13 @@ import static java.lang.System.getenv;
 
 public class UserDao {
 
+    //커넥션메이커 선언
+    ConnectionMaker connectionMaker = new ConnectionMaker();
+
+
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Map<String,String> env = getenv();
-        String dbHost = env.get("DB_HOST"); //DB_HOST=jdbc:mysql://localhost:3306/spring-db . 스키마까지도 연결해줘야함
-        String dbUser = env.get("DB_USER"); //DB_USER=루트
-        String dbPassword = env.get("DB_PASSWORD"); //DB_PASSWORD=패스워드
-
-
-
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection(dbHost,dbUser,dbPassword);
-
+        //커넥션 생성
+        Connection conn = connectionMaker.makeNewConnection();
 
         PreparedStatement ps = conn.prepareStatement("insert into user(id,name,password) values(?,?,?)");
         ps.setString(1,user.getId());
@@ -34,18 +30,8 @@ public class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Map<String,String> env = getenv();
-        String dbHost = env.get("DB_HOST");
-        String dbUser = env.get("DB_USER");
-        String dbPassword = env.get("DB_PASSWORD");
-
-
-
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection(dbHost,dbUser,dbPassword);
-
-
+        //커넥션 생성
+        Connection conn = connectionMaker.makeNewConnection();
 
         PreparedStatement ps = conn.prepareStatement("select id,name,password from user where id = ?");
         //?에 값을 대입하는 것이 setString
@@ -70,19 +56,15 @@ public class UserDao {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         UserDao userDao = new UserDao();
-//        User user = new User();
+        User user = new User();
 
-        //set
-//        user.setId("2");
-//        user.setName("준필");
-//        user.setPassword("pqweie11");
+        //add user to table
 
+        user.setId("3");
+        user.setName("맹구");
+        user.setPassword("1905985");
+        userDao.add(user);
 
-        //userDao.add(user);
-
-        User selectedUser = userDao.get("1");
-        System.out.println(selectedUser.getId());
-        System.out.println(selectedUser.getName());
-        System.out.println(selectedUser.getPassword());
+        //템플릿메소드패턴
     }
 }
