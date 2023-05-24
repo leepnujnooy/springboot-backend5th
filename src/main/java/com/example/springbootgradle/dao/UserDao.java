@@ -11,8 +11,11 @@ public class UserDao {
 
     ConnectionMaker connectionMaker;
 
-    public UserDao(){
-        this.connectionMaker = new DConnectionMaker();
+
+    //불필요한 의존관계를 제거하였음
+    //생성자를 이용한 DI
+    public UserDao(ConnectionMaker connectionMaker){
+        this.connectionMaker = connectionMaker;
     }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
@@ -58,7 +61,8 @@ public class UserDao {
     }
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao userDao = new UserDao();
+        ConnectionMaker cm = new DConnectionMaker();
+        UserDao userDao = new UserDao(cm);
         User user = new User();
 
         //add user to table
