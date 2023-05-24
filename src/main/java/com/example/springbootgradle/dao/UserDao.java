@@ -59,19 +59,4 @@ public class UserDao {
 
         return user;
     }
-
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        ConnectionMaker cm = new DConnectionMaker();
-        UserDao userDao = new UserDao(cm);
-        User user = new User();
-
-        //add user to table
-
-        user.setId("3");
-        user.setName("맹구");
-        user.setPassword("1905985");
-        userDao.add(user);
-
-        //템플릿메소드패턴
-    }
 }
