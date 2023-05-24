@@ -9,13 +9,15 @@ import static java.lang.System.getenv;
 
 public class UserDao {
 
-    //커넥션메이커 선언
-    ConnectionMaker connectionMaker = new ConnectionMaker();
+    ConnectionMaker connectionMaker;
 
+    public UserDao(){
+        this.connectionMaker = new DConnectionMaker();
+    }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
-        //커넥션 생성
-        Connection conn = connectionMaker.makeNewConnection();
+
+        Connection conn = connectionMaker.makeConnection();
 
         PreparedStatement ps = conn.prepareStatement("insert into user(id,name,password) values(?,?,?)");
         ps.setString(1,user.getId());
@@ -30,8 +32,9 @@ public class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
-        //커넥션 생성
-        Connection conn = connectionMaker.makeNewConnection();
+
+
+        Connection conn = connectionMaker.makeConnection();
 
         PreparedStatement ps = conn.prepareStatement("select id,name,password from user where id = ?");
         //?에 값을 대입하는 것이 setString
